@@ -20,7 +20,6 @@
           <p class="collection-item__row__value">36 maanden</p>
         </div>
       </div>
-      
     </div>
   </div>
 </template>
