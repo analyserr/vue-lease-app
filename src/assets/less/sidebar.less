@@ -1,0 +1,33 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: @c-shade-6;
+    width: 330px;
+    box-sizing: border-box;
+}
+
+.sidebar .title, .sidebar .title-s {
+    font-weight: 700;
+}
+
+.collection {
+}
+
+.collection-item {
+    border-top: 1px solid @c-stroke;
+
+    &:first-child {
+        padding-top: 0;
+        border-top: none;
+    }
+}
+
+.collection-item__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.collection-item__row {
+    display: flex;
+    justify-content: space-between;
+}

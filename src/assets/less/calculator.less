@@ -1,0 +1,29 @@
+.calculator {
+    flex: 1;
+    background-color: @c-shade-1;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-section {
+    height: fit-content;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(275px, 1fr))
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-item__label {
+    color: @c-shade-2;
+}
+
+.form-item__info {
+    color: @c-shade-3;
+    font-weight: 300; /* Was not used consistently in design, however font-weight 300 seems like the better option. */
+}
