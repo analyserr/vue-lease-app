@@ -71,26 +71,16 @@ query GetBoundaries{
   }
 }`
 
-const { result, loading, error } = useQuery(BOUNDARIES)
+const { result, loading, error } = useQuery(BOUNDARIES, null, { fetchPolicy: 'cache-first' })
 
 const assignBoundaries = () => {
-  console.log("fetching boundaries...")
-  console.log("result of the boundaries: ", result.value?.boundaries)
-  console.log("error:", error)
   if(result) {
     boundaries.value = (result.value?.boundaries as unknown as IBoundaries)
-    console.log("boundaries value: ", boundaries.value)
   }
 }
 
 onMounted(() => {
-  console.log("mounted")
+  // TO DO: the function below runs before graphql query is loaded, needs to be improved.
   assignBoundaries()
 })
-
-
 </script>
-
-<style>
-
-</style>

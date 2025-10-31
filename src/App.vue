@@ -1,7 +1,7 @@
 
 <template>
   <div class="main">
-    <CalculatorForm @save="calculate" :isCalculationLoading="loading"/>
+    <CalculatorForm @calculate="calculateLease" :isCalculationLoading="loading"/>
     <Sidebar/>
   </div>
 </template>
@@ -12,7 +12,7 @@ import Sidebar from './components/Sidebar.vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from "graphql-tag";
 import { ref, type Ref } from "vue"
-import type { ICalculationParams } from './interfaces';
+import type { ICalculationParams, ICalculationResult, ISavedCalculation } from './interfaces';
 
 const queryParams: Ref<ICalculationParams | undefined> = ref()
 
@@ -29,18 +29,18 @@ query Calculate($brand: String!, $type: String!, $year: Int!, $purchasePrice: Fl
         totalCosts
         downPayment
         tenor
-        handlingFee
         balloonPayment
         monthlyPayment
     }
 }`;
+// handlingFee /* ?? */
 
 const { result, loading, error } = useQuery(CALCULATE, queryParams)
-const calculate = (formData: ICalculationParams) => {
+const calculateLease = (formData: ICalculationParams) => {
   let formattedPurchasePrice: number = formData.purchasePrice
   
-  // Make sure purchasePrice is formatted to proper float
   if(typeof(formattedPurchasePrice) == "string") {
+    // Make sure purchasePrice is formatted to proper float
     // Remove periods and change comma (European decimal number indiator) to period, because parseFloat ignores commas.
     formattedPurchasePrice = parseFloat((formattedPurchasePrice as string).replace(".", "").replace(",","."))
   }
@@ -49,6 +49,24 @@ const calculate = (formData: ICalculationParams) => {
     ...formData,
     purchasePrice: formattedPurchasePrice
   }
-  console.log("result: ", result)
+  if(result.value) {
+    saveCalculation(result.value?.leaseCalculation)
+  }
+}
+
+const saveCalculation = (newCalculationResult: ICalculationResult) => {
+  let currentCalculations: ISavedCalculation[] = []
+  if(localStorage.getItem('savedCalculations')) {
+    currentCalculations = (JSON.parse(localStorage.getItem('savedCalculations')!) as unknown as ISavedCalculation[])
+  }
+
+  let newCalculations = [
+    ...currentCalculations, 
+    {  params: queryParams.value, result: newCalculationResult }
+  ]
+
+
+  const stringified = JSON.stringify(newCalculations)
+  localStorage.setItem('savedCalculations', stringified)
 }
 </script>

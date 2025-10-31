@@ -15,3 +15,15 @@ export interface IBoundaries {
         max: number
     }
 }
+
+export interface ICalculationResult {
+    downPayment: number,
+    monthlyPayment: number,
+    tenor: number,
+    totalCosts: number,
+    balloonPayment: number
+}
+export interface ISavedCalculation {
+    params: ICalculationParams,
+    result: ICalculationResult
+}
