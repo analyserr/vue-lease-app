@@ -18,7 +18,7 @@ body {
     height: 100%;
 }
 
-button {
+.button {
     width: fit-content;
     height: 40px;
     gap: 8px;
@@ -32,7 +32,12 @@ button {
     font-weight: 500;
     font-size: 14px;
     cursor: pointer;
+
+    &--loading {
+        opacity: 0.8;
+    }
 }
+
 
 input {
     height: 40px;
@@ -49,7 +54,7 @@ input {
 }
 
 @media(max-width: 768px) {
-    button, input {
+    .button, input {
         font-size: 12px;
         padding: 0 8px;
     }

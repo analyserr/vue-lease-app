@@ -24,12 +24,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script setup lang="ts">
+import { ref } from "vue";
 
-}
+const savedCalculations = ref([])
+console.log('savedcalculations:', savedCalculations)
+
 </script>
-
-<style>
-
-</style>
