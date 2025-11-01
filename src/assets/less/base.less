@@ -53,9 +53,23 @@ input {
     }
 }
 
-@media(max-width: 768px) {
+@media(max-width: @breakpoint-desktop) {
+    .main {
+        max-height: 600px;
+    }
+}
+
+@media(max-width: @breakpoint-tablet) {
     .button, input {
         font-size: 12px;
         padding: 0 8px;
+    }
+
+    .main {
+        width: 100vw;
+        max-width: unset;
+        height: 100vh;
+        max-height: unset;
+        flex-direction: column-reverse;
     }
 }

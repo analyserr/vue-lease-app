@@ -1,4 +1,4 @@
-.calculator-form {
+.calculator-form__wrapper {
     flex: 1;
     background-color: @c-shade-1;
 }
@@ -11,7 +11,8 @@
 .form-section {
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(2, minmax(275px, 1fr))
+    // grid-template-columns: repeat(2, minmax(275px, 1fr));
+    grid-template-columns: repeat( auto-fit, minmax(240px, 1fr) );
 }
 
 .form-item {
@@ -30,4 +31,10 @@
 
 .form-item__input--error {
     box-shadow: 0 0 0 2px @c-error;
+}
+
+@media(max-width: @breakpoint-tablet) {
+    .calculator-form__wrapper {
+        flex: unset;
+    }
 }

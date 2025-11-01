@@ -1,5 +1,5 @@
 <template>
-  <div class="calculator-form spacing-p-vertical spacing-p-horizontal spacing-gap">
+  <div class="calculator-form__wrapper spacing-p-vertical spacing-p-horizontal spacing-gap">
     <form ref="formEl" class="form spacing-gap">
       <div class="form-section spacing-gap">
         <div class="form-item spacing-gap--small">
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref, type Ref, computed, useTemplateRef } from "vue"
 import type { ICalculationParams, IBoundaries } from '../interfaces';
-import { formatPrettyPrice } from "@/composables/formatPrice";
+import { formatPrettyPrice } from "@/composables/formatNumbers";
 import { useBoundariesQuery } from "@/composables/useBoundariesQuery";
 import { validateForm } from "@/composables/validateForm";
 
@@ -50,14 +50,22 @@ const formEl = useTemplateRef<HTMLFormElement>('formEl')
 
 const handleSubmit = (event: SubmitEvent) => {
   event.preventDefault()
-
   if(!validateForm(formEl.value)) return
+
   emit('calculate', {
     brand: brandInput.value, 
     type: typeInput.value,
     year: yearInput.value || 0, 
     purchasePrice: purchasePriceInput.value || 0
   })
+  resetInputs()
+}
+
+const resetInputs = () => {
+  brandInput.value = ''
+  typeInput.value = ''
+  yearInput.value = undefined
+  purchasePriceInput.value = undefined
 }
 
 const boundariesQuery = useBoundariesQuery()

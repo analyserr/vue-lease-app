@@ -1,4 +1,3 @@
-
 <template>
   <div class="main">
     <CalculatorForm @calculate="calculateLease" :isCalculationLoading="loading"/>
@@ -12,7 +11,7 @@ import Sidebar from './components/Sidebar.vue';
 import { onMounted, ref, watch, type Ref } from "vue"
 import type { ICalculationParams, ISavedCalculation } from './interfaces';
 import { useCalculationQuery } from './composables/useCalculationQuery';
-import { formatNumberStringToFloat } from './composables/formatPrice';
+import { formatNumberStringToFloat } from './composables/formatNumbers';
 
 const queryParams: Ref<ICalculationParams | undefined> = ref()
 const savedCalculations: Ref<ISavedCalculation[]> = ref([])
@@ -21,6 +20,7 @@ const calculationQuery = useCalculationQuery(queryParams)
 const calculateLease = (formData: ICalculationParams) => {  
   queryParams.value = {
     ...formData,
+    year: formatNumberStringToFloat(formData.year),
     purchasePrice: formatNumberStringToFloat(formData.purchasePrice)
   }
 }
@@ -30,7 +30,6 @@ watch(calculationQuery.result, () => {
     saveCalculation()
   }
 })
-
 
 const loadSavedCalculationsFromLocalStorage = () => {
   if(localStorage.getItem('savedCalculations')) {

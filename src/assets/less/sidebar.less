@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     background-color: @c-shade-6;
-    width: 330px;
+    width: 333px;
     box-sizing: border-box;
 }
 
@@ -42,4 +42,11 @@
 .collection-item__header-price {
     color: @c-secondary;
     font-weight: 700;
+}
+
+@media(max-width: @breakpoint-tablet) {
+    .sidebar {
+        width: 100%;
+        height: 100%;
+    }
 }

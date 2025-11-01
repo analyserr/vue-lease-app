@@ -1,4 +1,4 @@
-import { formatNumberStringToFloat } from "@/composables/formatPrice";
+import { formatNumberStringToFloat } from "@/composables/formatNumbers";
 
 export function validateForm(formEl: HTMLFormElement | null) {
   // Use original HTML form validation (and browser's original error messages) to highlight form errors.

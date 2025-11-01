@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatPrettyPrice } from "@/composables/formatPrice";
+import { formatPrettyPrice } from "@/composables/formatNumbers";
 import type { ISavedCalculation } from "@/interfaces";
 
 const props = defineProps<{
