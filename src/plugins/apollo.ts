@@ -7,7 +7,10 @@ import {
 } from "@apollo/client/core";
 
 const httpLink = createHttpLink({
-    uri: "https://frontend-developer-assignment.vercel.app/api/graphql"
+    uri: "https://frontend-developer-assignment.vercel.app/api/graphql",
+    headers: {
+        'Content-Type': 'application/json'
+    }
 });
 
 const cache = new InMemoryCache();

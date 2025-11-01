@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import gql from "graphql-tag";
-import { onMounted, ref, type Ref } from "vue"
+import { ref, type Ref, computed } from "vue"
 import type { ICalculationParams, IBoundaries } from '../interfaces';
 import { useQuery } from "@vue/apollo-composable";
 import { formatPrettyPrice } from "@/composables/formatPrice";
@@ -37,7 +37,6 @@ const brandInput: Ref<string> = ref('testing');
 const typeInput: Ref<string> = ref('123');
 const yearInput: Ref<number> = ref(2020);
 const purchasePriceInput: Ref<number> = ref(15000)
-const boundaries: Ref<IBoundaries | undefined> = ref()
 
 const emit = defineEmits<{
   calculate: [ICalculationParams]
@@ -57,6 +56,7 @@ const handleSubmit = (event: SubmitEvent) => {
   })
 }
 
+// Fetch boundaries for the form
 const BOUNDARIES = gql`
 query GetBoundaries{
   boundaries {
@@ -70,17 +70,6 @@ query GetBoundaries{
       }
   }
 }`
-
 const { result, loading, error } = useQuery(BOUNDARIES, null, { fetchPolicy: 'cache-first' })
-
-const assignBoundaries = () => {
-  if(result) {
-    boundaries.value = (result.value?.boundaries as unknown as IBoundaries)
-  }
-}
-
-onMounted(() => {
-  // TO DO: the function below runs before graphql query is loaded, needs to be improved.
-  assignBoundaries()
-})
+const boundaries = computed((): IBoundaries => (result.value?.boundaries as IBoundaries))
 </script>
