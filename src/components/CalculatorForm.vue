@@ -27,16 +27,15 @@
 </template>
 
 <script setup lang="ts">
-import gql from "graphql-tag";
 import { ref, type Ref, computed } from "vue"
 import type { ICalculationParams, IBoundaries } from '../interfaces';
-import { useQuery } from "@vue/apollo-composable";
 import { formatPrettyPrice } from "@/composables/formatPrice";
+import { useBoundariesQuery } from "@/composables/useBoundariesQuery";
 
-const brandInput: Ref<string> = ref('testing');
-const typeInput: Ref<string> = ref('123');
-const yearInput: Ref<number> = ref(2020);
-const purchasePriceInput: Ref<number> = ref(15000)
+const brandInput: Ref<string> = ref('');
+const typeInput: Ref<string> = ref('');
+const yearInput: Ref<number | undefined> = ref();
+const purchasePriceInput: Ref<number | undefined> = ref()
 
 const emit = defineEmits<{
   calculate: [ICalculationParams]
@@ -51,25 +50,11 @@ const handleSubmit = (event: SubmitEvent) => {
   emit('calculate', {
     brand: brandInput.value, 
     type: typeInput.value,
-    year: yearInput.value, 
-    purchasePrice: purchasePriceInput.value
+    year: yearInput.value || 0, 
+    purchasePrice: purchasePriceInput.value || 0
   })
 }
 
-// Fetch boundaries for the form
-const BOUNDARIES = gql`
-query GetBoundaries{
-  boundaries {
-      objectYear {
-          min
-          max
-      }
-      purchasePrice {
-          min
-          max
-      }
-  }
-}`
-const { result, loading, error } = useQuery(BOUNDARIES, null, { fetchPolicy: 'cache-first' })
-const boundaries = computed((): IBoundaries => (result.value?.boundaries as IBoundaries))
+const boundariesQuery = useBoundariesQuery()
+const boundaries = computed((): IBoundaries => (boundariesQuery.result.value?.boundaries as IBoundaries))
 </script>

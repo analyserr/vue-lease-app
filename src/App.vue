@@ -2,7 +2,7 @@
 <template>
   <div class="main">
     <CalculatorForm @calculate="calculateLease" :isCalculationLoading="loading"/>
-    <Sidebar/>
+    <Sidebar :savedCalculations="savedCalculations"/>
   </div>
 </template>
 
@@ -10,13 +10,12 @@
 import CalculatorForm from './components/CalculatorForm.vue';
 import Sidebar from './components/Sidebar.vue';
 import { ref, type Ref } from "vue"
-import type { ICalculationParams, ICalculationResult, ISavedCalculation } from './interfaces';
+import type { ICalculationParams, ISavedCalculation } from './interfaces';
 import { useCalculationQuery } from './composables/useCalculationQuery';
-const queryParams: Ref<ICalculationParams | undefined> = ref()
 
-// if(formIsValid(queryParams)) {
-const calculationQuery = useCalculationQuery(queryParams.value!)
-// }
+const queryParams: Ref<ICalculationParams | undefined> = ref()
+const savedCalculations: Ref<ISavedCalculation[]> = ref([])
+const calculationQuery = useCalculationQuery(queryParams)
 
 const calculateLease = (formData: ICalculationParams) => {
   let formattedPurchasePrice: number = formData.purchasePrice
@@ -30,7 +29,6 @@ const calculateLease = (formData: ICalculationParams) => {
     purchasePrice: formattedPurchasePrice
   }
   
-  // calculationQuery.refetch(queryParams)
   if(calculationQuery.result.value?.leaseCalculation) {
     saveCalculation()
   } else {
@@ -39,11 +37,12 @@ const calculateLease = (formData: ICalculationParams) => {
 }
 
 const saveCalculation = () => {
-  let savedCalculations: ISavedCalculation[] = []
+  savedCalculations.value = []
   if(localStorage.getItem('savedCalculations')) {
-    savedCalculations = (JSON.parse(localStorage.getItem('savedCalculations')!) as unknown as ISavedCalculation[])
+    savedCalculations.value = (JSON.parse(localStorage.getItem('savedCalculations')!) as unknown as ISavedCalculation[])
   }
-  savedCalculations.push( { params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
-  localStorage.setItem('savedCalculations', JSON.stringify(savedCalculations))
+  // Add new calculation to beginning of the array
+  savedCalculations.value.splice(0, 0, { params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
+  localStorage.setItem('savedCalculations', JSON.stringify(savedCalculations.value))
 }
 </script>

@@ -3,7 +3,7 @@ export function formatPrettyPrice(originalValue: number | undefined) {
         return "-"
     }
     
-    let formatter = new Intl.NumberFormat("de-DE");
+    let formatter = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2});
     let formattedNum = formatter.format(originalValue)
     
     return "€ " + formattedNum;
