@@ -1,9 +1,11 @@
 .sidebar {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     background-color: @c-shade-6;
     width: 333px;
     box-sizing: border-box;
+    line-height: 21px;
 }
 
 .sidebar .title {
@@ -11,7 +13,18 @@
 }
 
 .collection {
+    height: 100%;
     overflow: auto;
+}
+
+.collection--empty {
+    height: 20%;
+    align-content: center;
+
+    p {
+        color: @c-shade-3;
+        text-align: center;
+    }
 }
 
 .collection-item {
@@ -42,6 +55,18 @@
 .collection-item__header-price {
     color: @c-secondary;
     font-weight: 700;
+}
+
+.sidebar-collection-move,
+.sidebar-collection-enter-active,
+.sidebar-collection-leave-active {
+    transition: all 0.5s ease;
+}
+
+.sidebar-collection-enter-from,
+.sidebar-collection-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 
 @media(max-width: @breakpoint-tablet) {

@@ -3,7 +3,7 @@ export function formatPrettyPrice(originalValue: number | undefined): string {
         return "-"
     }
     
-    let formatter = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2});
+    let formatter = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2, trailingZeroDisplay: 'stripIfInteger'});
     let formattedNum = formatter.format(originalValue)
     
     return "€ " + formattedNum;
@@ -19,7 +19,6 @@ export function formatNumberStringToFloat(originalValue: string | number): numbe
     if(typeof(originalValue) == "string") {
         // Format price input to proper float.
         let formattedValue: number = parseFloat((originalValue).replace(".", "").replace(",","."))
-        console.log("formatted value:", formattedValue)
         return formattedValue;
     } else {
         return originalValue

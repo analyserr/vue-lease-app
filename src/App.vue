@@ -40,7 +40,6 @@ const loadSavedCalculationsFromLocalStorage = () => {
 }
 
 const saveCalculation = () => {
-  loadSavedCalculationsFromLocalStorage()
   // Add new calculation to beginning of the array
   savedCalculations.value.splice(0, 0, { params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
   localStorage.setItem('savedCalculations', JSON.stringify(savedCalculations.value))
