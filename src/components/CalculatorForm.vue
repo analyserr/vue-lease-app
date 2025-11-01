@@ -1,36 +1,37 @@
 <template>
   <div class="calculator-form spacing-p-vertical spacing-p-horizontal spacing-gap">
-    <form @submit="handleSubmit" class="form spacing-gap">
+    <form ref="formEl" class="form spacing-gap">
       <div class="form-section spacing-gap">
         <div class="form-item spacing-gap--small">
           <label class="form-item__label title-s">Merk</label>
-          <input v-model="brandInput" class="form-item__input" placeholder="Bijvoorbeeld DAF"/>
+          <input v-model="brandInput" required class="form-item__input" placeholder="Bijvoorbeeld DAF"/>
         </div>
         <div class="form-item spacing-gap--small">
           <label class="form-item__label title-s">Type</label>
-          <input v-model="typeInput" class="form-item__input" placeholder="Bijvoorbeeld XF480"/>
-      </div>
+          <input v-model="typeInput" required class="form-item__input" placeholder="Bijvoorbeeld XF480"/>
+        </div>
         <div class="form-item spacing-gap--small">
           <label class="form-item__label title-s">Bouwjaar</label>
-          <input v-model="yearInput" type="number" :min="boundaries?.objectYear.min" :max="boundaries?.objectYear.max" step="1" class="form-item__input" placeholder="Bijvoorbeeld 2021"/>
+          <input v-model="yearInput" required class="form-item__input" placeholder="Bijvoorbeeld 2021" inputmode="numeric" :data-numbers-only="true" :data-min-number="boundaries?.objectYear.min" :data-max-number="boundaries?.objectYear.max"/>
           <p class="form-item__info text">Tussen {{boundaries?.objectYear.min || '-'}} en {{ boundaries?.objectYear.max || '-' }}</p>
         </div>
         <div class="form-item spacing-gap--small">
           <label class="form-item__label title-s">Aanschafwaarde</label>
-          <input v-model="purchasePriceInput" class="form-item__input" placeholder="Bijvoorbeeld 50000"/>
+          <input v-model="purchasePriceInput" required class="form-item__input" placeholder="Bijvoorbeeld 50000" inputmode="decimal" :data-numbers-only="true" :data-min-number="boundaries?.purchasePrice.min" :data-max-number="boundaries?.purchasePrice.max"/>
           <p class="form-item__info text" >Tussen {{formatPrettyPrice(boundaries?.purchasePrice.min)}} en {{ formatPrettyPrice(boundaries?.purchasePrice.max) }}</p>
         </div>
       </div>
-      <button type="submit" class="button" :class="{'button--loading': props.isCalculationLoading}" :disabled="props.isCalculationLoading">Berekening opslaan</button>
+      <button @click="handleSubmit" type="submit" class="button" :class="{'button--loading': props.isCalculationLoading}" :disabled="props.isCalculationLoading">Berekening opslaan</button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref, computed } from "vue"
+import { ref, type Ref, computed, useTemplateRef } from "vue"
 import type { ICalculationParams, IBoundaries } from '../interfaces';
 import { formatPrettyPrice } from "@/composables/formatPrice";
 import { useBoundariesQuery } from "@/composables/useBoundariesQuery";
+import { validateForm } from "@/composables/validateForm";
 
 const brandInput: Ref<string> = ref('');
 const typeInput: Ref<string> = ref('');
@@ -45,8 +46,12 @@ const props = defineProps<{
   isCalculationLoading: boolean
 }>();
 
+const formEl = useTemplateRef<HTMLFormElement>('formEl')
+
 const handleSubmit = (event: SubmitEvent) => {
   event.preventDefault()
+
+  if(!validateForm(formEl.value)) return
   emit('calculate', {
     brand: brandInput.value, 
     type: typeInput.value,

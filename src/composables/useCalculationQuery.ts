@@ -22,8 +22,8 @@ export const useCalculationQuery = (queryParams: Ref<ICalculationParams | undefi
             }
         }
     `;
-    const { result, loading, error } = useQuery(query, queryParams || {})
-    return { result, loading, error }
+    const { result, loading, error, refetch } = useQuery(query, queryParams)
+    return { result, loading, error, refetch }
 }
 
 // handlingFee /* ?? */

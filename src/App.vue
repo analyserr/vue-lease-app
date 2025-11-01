@@ -9,40 +9,46 @@
 <script setup lang="ts">
 import CalculatorForm from './components/CalculatorForm.vue';
 import Sidebar from './components/Sidebar.vue';
-import { ref, type Ref } from "vue"
+import { onMounted, ref, watch, type Ref } from "vue"
 import type { ICalculationParams, ISavedCalculation } from './interfaces';
 import { useCalculationQuery } from './composables/useCalculationQuery';
+import { formatNumberStringToFloat } from './composables/formatPrice';
 
 const queryParams: Ref<ICalculationParams | undefined> = ref()
 const savedCalculations: Ref<ISavedCalculation[]> = ref([])
 const calculationQuery = useCalculationQuery(queryParams)
 
-const calculateLease = (formData: ICalculationParams) => {
-  let formattedPurchasePrice: number = formData.purchasePrice
-  if(typeof(formattedPurchasePrice) == "string") {
-    // Format price input to proper float
-    formattedPurchasePrice = parseFloat((formattedPurchasePrice as string).replace(".", "").replace(",","."))
-  }
-  
+const calculateLease = (formData: ICalculationParams) => {  
   queryParams.value = {
     ...formData,
-    purchasePrice: formattedPurchasePrice
+    purchasePrice: formatNumberStringToFloat(formData.purchasePrice)
   }
-  
+}
+
+watch(calculationQuery.result, () => {
   if(calculationQuery.result.value?.leaseCalculation) {
     saveCalculation()
+  }
+})
+
+
+const loadSavedCalculationsFromLocalStorage = () => {
+  if(localStorage.getItem('savedCalculations')) {
+    savedCalculations.value = (JSON.parse(localStorage.getItem('savedCalculations')!) as unknown as ISavedCalculation[])
   } else {
-    // Room for error handling
+    savedCalculations.value = []
   }
 }
 
 const saveCalculation = () => {
-  savedCalculations.value = []
-  if(localStorage.getItem('savedCalculations')) {
-    savedCalculations.value = (JSON.parse(localStorage.getItem('savedCalculations')!) as unknown as ISavedCalculation[])
-  }
+  loadSavedCalculationsFromLocalStorage()
   // Add new calculation to beginning of the array
   savedCalculations.value.splice(0, 0, { params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
   localStorage.setItem('savedCalculations', JSON.stringify(savedCalculations.value))
 }
+
+onMounted(() => {
+  loadSavedCalculationsFromLocalStorage()
+})
+
 </script>
