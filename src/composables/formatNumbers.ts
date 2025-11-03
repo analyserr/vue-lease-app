@@ -3,8 +3,8 @@ export function formatPrettyPrice(originalValue: number | undefined): string {
         return "-"
     }
     
-    let formatter = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2, trailingZeroDisplay: 'stripIfInteger'});
-    let formattedNum = formatter.format(originalValue)
+    let formatter = new Intl.NumberFormat("de-DE", {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    let formattedNum = formatter.format(originalValue).replace(',00', '');
     
     return "€ " + formattedNum;
 }

@@ -24,6 +24,7 @@ export interface ICalculationResult {
     balloonPayment: number
 }
 export interface ISavedCalculation {
+    id: number,
     params: ICalculationParams,
     result: ICalculationResult
 }

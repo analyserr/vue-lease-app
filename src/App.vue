@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <CalculatorForm @calculate="calculateLease" :isCalculationLoading="loading"/>
+    <CalculatorForm @calculate="calculateLease" :isCalculationLoading="calculationQuery.loading.value"/>
     <Sidebar :savedCalculations="savedCalculations"/>
   </div>
 </template>
@@ -41,7 +41,7 @@ const loadSavedCalculationsFromLocalStorage = () => {
 
 const saveCalculation = () => {
   // Add new calculation to beginning of the array
-  savedCalculations.value.splice(0, 0, { params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
+  savedCalculations.value.splice(0, 0, { id: Math.random(), params: queryParams.value!, result: calculationQuery.result.value?.leaseCalculation })
   localStorage.setItem('savedCalculations', JSON.stringify(savedCalculations.value))
 }
 

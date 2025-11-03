@@ -5,7 +5,7 @@
       <TransitionGroup name="sidebar-collection">
         <div 
           v-for="savedCalculation in props.savedCalculations" 
-          v-bind:key="savedCalculation" 
+          v-bind:key="savedCalculation.id" 
           class="collection-item spacing-p-vertical--small spacing-p-horizontal spacing-gap--small"
           >
           <div class="collection-item__header title-s">
